@@ -24,10 +24,6 @@ namespace webike.Models
         public List<Rating> Ratings { get; set; }
 
 
-        public Event = new (
-            int eventID,
-            string title,
-            DateTime date,
-            )
+   
     }
 }
