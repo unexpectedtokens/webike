@@ -9,11 +9,11 @@ using webike.Models;
 
 namespace webike.Controllers
 {
-    public class HomeController : Controller
+    public class LandingController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<LandingController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public LandingController(ILogger<LandingController> logger)
         {
             _logger = logger;
         }
@@ -23,10 +23,7 @@ namespace webike.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+       
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
