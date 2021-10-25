@@ -17,7 +17,9 @@ namespace webike.Models
         public DbSet<Route> Routes {get;set;}
         public DbSet<Workout> Workouts {get;set;}
         
-
+        public WebikeContext(DbContextOptions options) : base(options)
+        {
+        }
 
     }
 

@@ -6,7 +6,6 @@ namespace webike.Models
 {
     public class Route : EventActivity
     {
-        public int RouteID { get; set;}
         public string StartPoint { get; set; }
         public string EndPoint { get; set; }
         public Difficulty RouteDifficulty { get; set; }

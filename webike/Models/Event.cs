@@ -7,7 +7,8 @@ namespace webike.Models
     public class Event
     {
 
-        public int EvetnID { get; set; }
+        [Key]
+        public int EventID { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]

@@ -1,0 +1,68 @@
+@model webike.Models.Route
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Route</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="StartPoint" class="control-label"></label>
+                <input asp-for="StartPoint" class="form-control" />
+                <span asp-validation-for="StartPoint" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EndPoint" class="control-label"></label>
+                <input asp-for="EndPoint" class="form-control" />
+                <span asp-validation-for="EndPoint" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RouteDifficulty" class="control-label"></label>
+                <select asp-for="RouteDifficulty" class="form-control"></select>
+                <span asp-validation-for="RouteDifficulty" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Duration" class="control-label"></label>
+                <input asp-for="Duration" class="form-control" />
+                <span asp-validation-for="Duration" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Addition" class="control-label"></label>
+                <input asp-for="Addition" class="form-control" />
+                <span asp-validation-for="Addition" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Difficulty" class="control-label"></label>
+                <input asp-for="Difficulty" class="form-control" />
+                <span asp-validation-for="Difficulty" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuitableBikeType" class="control-label"></label>
+                <select asp-for="SuitableBikeType" class="form-control"></select>
+                <span asp-validation-for="SuitableBikeType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

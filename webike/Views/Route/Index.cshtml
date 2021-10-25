@@ -1,0 +1,77 @@
+@model IEnumerable<webike.Models.Route>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StartPoint)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndPoint)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RouteDifficulty)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Addition)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Difficulty)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SuitableBikeType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartPoint)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndPoint)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RouteDifficulty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duration)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Addition)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Difficulty)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SuitableBikeType)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.EventActivityID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.EventActivityID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.EventActivityID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

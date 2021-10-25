@@ -1,12 +1,14 @@
 using System.Collections.Generic;
 using System;
-
+using System.ComponentModel.DataAnnotations;
 namespace webike.Models
 {
 
     public abstract class User
     {
 
+
+        [Key]
         public int UserID {get;set;}
         public string Alias {get;set;}
         public string Password {get;set;}
