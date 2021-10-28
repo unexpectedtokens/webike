@@ -1,5 +1,36 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model webike.Models.Cyclist;
+
+
+<div class="container">
+
+    <h1>Maak een account</h1>
+    <form method="post" asp-controller="Auth" asp-action="Register">
+        <div>
+            <label>Voornaam:</label>
+            @Html.TextBoxFor(m => m.FirstName)
+        </div>
+          <div>
+            <label>Achternaam:</label>
+            @Html.TextBoxFor(m => m.LastName)
+        </div>
+          <div>
+            <label>Gebruikersnaam:</label>
+            @Html.TextBoxFor(m => m.Alias)
+        </div>
+          <div>
+            <label>Geboortedatum:</label>
+            <input class="form-control" asp-for="DateOfBirth" />
+        </div>
+          <div>
+            <label>Woonplaats:</label>
+            @Html.TextBoxFor(m => m.City)
+        </div>
+        <div>
+            <label for="">Wachtwoord</label>
+            @Html.PasswordFor(m => m.Password)
+        </div>
+        <input type="submit" value="Maak account"/>
+    </form>
+    <p>Heb je al een account? <a asp-controller="Auth" asp-action="Index">Log in</a></p>
+
+</div>

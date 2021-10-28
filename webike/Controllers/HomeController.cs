@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace webike.Controllers
 {
-    public class HomePageController : Controller
+    public class HomeController : Controller
     {
         public IActionResult Index()
         {
