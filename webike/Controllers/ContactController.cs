@@ -44,7 +44,7 @@ namespace webike.Controllers
             newContact.Sender = curCyc;
             receivingCyc.Contacts.Add(newContact);
             _ctx.SaveChanges();
-            return Index();
+            return RedirectToAction("Index", "Contact");
         }
 
 

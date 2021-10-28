@@ -24,7 +24,7 @@ namespace webike.Models
         [Required]
         public List<Rating> Ratings { get; set; }
 
-
+        public bool Public {get;set;}
    
     }
 }
