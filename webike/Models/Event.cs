@@ -25,6 +25,8 @@ namespace webike.Models
         public List<Rating> Ratings { get; set; }
 
         public bool Public {get;set;}
+
+        public EventActivity Activity {get;set;}
    
     }
 }

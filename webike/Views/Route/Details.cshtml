@@ -1,7 +1,8 @@
-@model webike.Models.Route
+@model webike.ViewModels.RouteViewModel;
 
 @{
     ViewData["Title"] = "Details";
+    var userIsOwner = false;
 }
 
 <h1>Details</h1>
@@ -11,56 +12,79 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartPoint)
+            @Html.DisplayNameFor(model => model.Route.StartPoint)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartPoint)
+            @Html.DisplayFor(model => model.Route.StartPoint)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EndPoint)
+            @Html.DisplayNameFor(model => model.Route.EndPoint)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndPoint)
+            @Html.DisplayFor(model => model.Route.EndPoint)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RouteDifficulty)
+            @Html.DisplayNameFor(model => model.Route.Duration)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RouteDifficulty)
+            @Html.DisplayFor(model => model.Route.Duration)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Duration)
+            @Html.DisplayNameFor(model => model.Route.Addition)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Duration)
+            @Html.DisplayFor(model => model.Route.Addition)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Addition)
+            @Html.DisplayNameFor(model => model.Route.Title)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Addition)
+            @Html.DisplayFor(model => model.Route.Title)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Route.Difficulty)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Route.Difficulty)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Difficulty)
+            @Html.DisplayNameFor(model => model.Route.SuitableBikeType)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Difficulty)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SuitableBikeType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SuitableBikeType)
+            @Html.DisplayFor(model => model.Route.SuitableBikeType)
         </dd>
     </dl>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.EventActivityID">Edit</a> |
+@if (userIsOwner){
+        <a asp-action="Edit" asp-route-id="@Model.Route.EventActivityID">Edit</a>
+}
+
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+<div>
+    @if(!userIsOwner){
+        <form method="post" asp-action="CreateRating">
+            <div>
+                <label>Nummer van 1 tot 5:</label>
+                @Html.TextBoxFor(m => m.NewRating.Number, new { @type = "number" })
+            </div>
+            <div>
+                <label>Tekst</label>
+                @Html.TextAreaFor(m => m.NewRating.Description)
+            </div>
+            <input type="submit" value="Deel ervaring"/>
+        </form>
+        //@Html.TextBoxFor(i => i.Port) 
+    }
+    <div>
+        @foreach (var item in Model.Route.Ratings)
+        {
+            <p>@item.Cyclist.Alias</p>
+            <p>Rating van: @item.Number</p>
+            <p>@item.Description</p>
+        }
+    </div>
+</div>
+

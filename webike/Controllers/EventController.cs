@@ -32,13 +32,13 @@ namespace webike.Controllers
                 return NotFound();
             }
 
-            var @event = await _context.Events
+            var @event = await _context.Events.Include(e => e.Ratings).ThenInclude(r => r.Cyclist)
                 .FirstOrDefaultAsync(m => m.EventID == id);
             if (@event == null)
             {
                 return NotFound();
             }
-
+            
             return View(@event);
         }
 
@@ -53,15 +53,11 @@ namespace webike.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EventID,Title,Date,StartLocation,Description")] Event @event)
+        public async Task<IActionResult> Create([Bind("EventID,Title,Date,StartLocation,Description,Public")] Event @event)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(@event);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(@event);
+            _context.Add(@event);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Event/Edit/5
@@ -85,7 +81,7 @@ namespace webike.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EventID,Title,Date,StartLocation,Description")] Event @event)
+        public async Task<IActionResult> Edit(int id, [Bind("EventID,Title,Date,StartLocation,Description,Public")] Event @event)
         {
             if (id != @event.EventID)
             {
@@ -131,6 +127,16 @@ namespace webike.Controllers
             }
 
             return View(@event);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateRating(int? id)
+        {
+            // if(id == null){
+            //     return NotFound()
+            // }
+            // var 
+            return View();
         }
 
         // POST: Event/Delete/5

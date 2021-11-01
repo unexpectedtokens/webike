@@ -32,7 +32,7 @@ namespace webike.Controllers
                 return NotFound();
             }
 
-            var workout = await _context.Workouts
+            var workout = await _context.Workouts.Include(w => w.Ratings).ThenInclude(r => r.Cyclist)
                 .FirstOrDefaultAsync(m => m.EventActivityID == id);
             if (workout == null)
             {

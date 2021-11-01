@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
+    var userIsOwner = false;
 }
 
 <h1>Details</h1>
@@ -31,6 +32,20 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.EventActivityID">Edit</a> |
+
+@if (userIsOwner){
+        <a asp-action="Edit" asp-route-id="@Model.EventActivityID">Edit</a>
+}
+
     <a asp-action="Index">Back to List</a>
+</div>
+
+
+<div>
+    @foreach (var item in Model.Ratings)
+    {
+        <p>@item.Cyclist.Alias</p>
+        <p>Rating van: @item.Number</p>
+        <p>@item.Description</p>
+    }
 </div>

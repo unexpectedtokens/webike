@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using webike.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using webike.Models;
 
@@ -32,14 +32,15 @@ namespace webike.Controllers
                 return NotFound();
             }
 
-            var route = await _context.Routes
+            var route = await _context.Routes.Include(e => e.Ratings).ThenInclude(r => r.Cyclist)
                 .FirstOrDefaultAsync(m => m.EventActivityID == id);
             if (route == null)
             {
                 return NotFound();
             }
-
-            return View(route);
+            var @vm = new RouteViewModel();
+            @vm.Route = route;
+            return View(@vm);
         }
 
         // GET: Route/Create
@@ -55,13 +56,10 @@ namespace webike.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StartPoint,EndPoint,RouteDifficulty,Duration,Addition,EventActivityID,Title,Difficulty,SuitableBikeType")] Route route)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(route);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(route);
+            _context.Add(route);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        
         }
 
         // GET: Route/Edit/5
@@ -131,6 +129,18 @@ namespace webike.Controllers
             }
 
             return View(route);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateRating(int? id, RouteViewModel routeViewModel){
+            if(id == null){
+                return Redirect(nameof(Index));
+            }
+            var route = await _context.Routes.FirstOrDefaultAsync(r => r.EventActivityID == id);
+            Console.WriteLine(routeViewModel.Route.EventActivityID);
+            Console.WriteLine(route.EventActivityID);
+
+            return View();
         }
 
         // POST: Route/Delete/5

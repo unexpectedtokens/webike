@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webike.Models;
 
 namespace webike.Migrations
 {
     [DbContext(typeof(WebikeContext))]
-    partial class WebikeContextModelSnapshot : ModelSnapshot
+    [Migration("20211101094613_addedEventActivityLink")]
+    partial class addedEventActivityLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,6 +98,9 @@ namespace webike.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RatingsRatingID")
+                        .HasColumnType("int");
+
                     b.Property<int>("SuitableBikeType")
                         .HasColumnType("int");
 
@@ -106,6 +111,8 @@ namespace webike.Migrations
                     b.HasKey("EventActivityID");
 
                     b.HasIndex("CreatorUserID");
+
+                    b.HasIndex("RatingsRatingID");
 
                     b.ToTable("EventActivities");
 
@@ -153,9 +160,6 @@ namespace webike.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EventActivityID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("EventID")
                         .HasColumnType("int");
 
@@ -165,8 +169,6 @@ namespace webike.Migrations
                     b.HasKey("RatingID");
 
                     b.HasIndex("CyclistUserID");
-
-                    b.HasIndex("EventActivityID");
 
                     b.HasIndex("EventID");
 
@@ -231,6 +233,9 @@ namespace webike.Migrations
                     b.Property<string>("EndPoint")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RouteDifficulty")
+                        .HasColumnType("int");
+
                     b.Property<string>("StartPoint")
                         .HasColumnType("nvarchar(max)");
 
@@ -293,7 +298,13 @@ namespace webike.Migrations
                         .WithMany()
                         .HasForeignKey("CreatorUserID");
 
+                    b.HasOne("webike.Models.Rating", "Ratings")
+                        .WithMany()
+                        .HasForeignKey("RatingsRatingID");
+
                     b.Navigation("Creator");
+
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("webike.Models.Excercise", b =>
@@ -314,10 +325,6 @@ namespace webike.Migrations
                     b.HasOne("webike.Models.Cyclist", "Cyclist")
                         .WithMany()
                         .HasForeignKey("CyclistUserID");
-
-                    b.HasOne("webike.Models.EventActivity", null)
-                        .WithMany("Ratings")
-                        .HasForeignKey("EventActivityID");
 
                     b.HasOne("webike.Models.Event", null)
                         .WithMany("Ratings")
@@ -343,8 +350,6 @@ namespace webike.Migrations
             modelBuilder.Entity("webike.Models.EventActivity", b =>
                 {
                     b.Navigation("Events");
-
-                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("webike.Models.User", b =>

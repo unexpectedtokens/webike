@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using webike.Models;
 
 namespace webike.Migrations
 {
     [DbContext(typeof(WebikeContext))]
-    partial class WebikeContextModelSnapshot : ModelSnapshot
+    [Migration("20211101114406_fixedRatingRel")]
+    partial class fixedRatingRel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,6 +232,9 @@ namespace webike.Migrations
 
                     b.Property<string>("EndPoint")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RouteDifficulty")
+                        .HasColumnType("int");
 
                     b.Property<string>("StartPoint")
                         .HasColumnType("nvarchar(max)");

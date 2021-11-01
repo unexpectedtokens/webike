@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace webike.Models
@@ -13,10 +13,12 @@ namespace webike.Models
         [Required]
         public Cyclist Creator { get; set; }
         [Required]
-        public Rating Ratings { get; set; }
+        public List<Rating> Ratings { get; set; }
         [Required]
         public Difficulty Difficulty { get; set; }
         [Required]
         public BikeType SuitableBikeType { get; set; }
+
+        public List<Event> Events {get;set;}
     }
 }
