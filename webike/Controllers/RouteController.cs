@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -136,11 +137,17 @@ namespace webike.Controllers
             if(id == null){
                 return Redirect(nameof(Index));
             }
-            var route = await _context.Routes.FirstOrDefaultAsync(r => r.EventActivityID == id);
-            Console.WriteLine(routeViewModel.Route.EventActivityID);
+            var curUserID = HttpContext.Session.GetInt32("userid");
+            if(curUserID == null){
+                return RedirectToAction("Index", "Auth");
+            }
+            var curUser = await _context.Cyclists.FirstOrDefaultAsync(c => c.UserID == curUserID);
+            var route = await _context.Routes.Include(r => r.Ratings).FirstOrDefaultAsync(r => r.EventActivityID == id);
             Console.WriteLine(route.EventActivityID);
-
-            return View();
+            routeViewModel.NewRating.Cyclist = curUser;
+            route.Ratings.Add(routeViewModel.NewRating);
+            _context.SaveChanges();
+            return Redirect($"/Route/Details/{id}");
         }
 
         // POST: Route/Delete/5

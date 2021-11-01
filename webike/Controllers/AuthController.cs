@@ -29,14 +29,16 @@ namespace webike.Controllers
         {
             var cfdb = _ctx.Cyclists.Where(u => u.Alias == c.Alias).FirstOrDefault();
             if(cfdb == null){
+                Console.WriteLine("un unknown");
                 return Index();
             }
             if(cfdb.Password != c.Password){
+                Console.WriteLine("pw wrong");
                 return Index();
             }
             HttpContext.Session.SetInt32("userid", cfdb.UserID);
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult Register ()

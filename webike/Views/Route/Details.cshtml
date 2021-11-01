@@ -65,7 +65,7 @@
 
 <div>
     @if(!userIsOwner){
-        <form method="post" asp-action="CreateRating">
+        <form method="post" action="/Route/CreateRating/@Model.Route.EventActivityID">
             <div>
                 <label>Nummer van 1 tot 5:</label>
                 @Html.TextBoxFor(m => m.NewRating.Number, new { @type = "number" })
