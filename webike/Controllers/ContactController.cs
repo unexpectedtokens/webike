@@ -5,8 +5,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System;
 using webike.ViewModels;
-
-
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 namespace webike.Controllers
 {
     public class ContactController : Controller
@@ -25,19 +25,50 @@ namespace webike.Controllers
             var curCyc = Cyclist.GetCyclistFromID(_ctx, id);
             var vm = new ContactViewModel();
             vm.Contacts = curCyc.Contacts;
-            vm.Cyclists = _ctx.Cyclists.Where(x => true).ToList();;
+            List<int> toExcludeContactIDS = new List<int>(
+                curCyc.UserID
+            );
+
+            vm.Contacts.ForEach(x=>{
+                if(x.Accepted){
+                    toExcludeContactIDS.Add(x.Sender.UserID);
+                }
+            });
+            var contacts = _ctx.Cyclists.Include(c => c.Contacts).ThenInclude(c => c.Sender).Where(c => c.UserID != curCyc.UserID).ToList();
+            foreach(var x in contacts)
+            {
+                var isContact = false;
+                foreach(var c in x.Contacts)
+                {
+                    if(!isContact && c.Sender.UserID == curCyc.UserID){
+                        isContact = true;
+                        break;
+                    }
+                }
+                if (isContact){
+                    var newContact = new Contact();
+                    newContact.Sender = x;
+                    newContact.Accepted = true;
+                    vm.Contacts.Add(newContact);
+                }
+                
+                
+            }
+            vm.Cyclists = _ctx.Cyclists.Where(x => !toExcludeContactIDS.Contains(x.UserID)).ToList();;
             return View(vm);
         }
 
 
-        [HttpPost]
         public IActionResult Add(int id)
         {
-            var senderid = Convert.ToInt32(HttpContext.Session.GetInt32("userid"));
+            var senderid = HttpContext.Session.GetInt32("userid");
+            if (senderid == null){
+                return RedirectToAction("Index", "Auth");
+            }
             if(id == 0){
                 return RedirectToAction("Index", "Auth");
             }
-            var curCyc = Cyclist.GetCyclistFromID(_ctx, senderid);
+            var curCyc = Cyclist.GetCyclistFromID(_ctx, Convert.ToInt32(senderid));
             var receivingCyc = Cyclist.GetCyclistFromID(_ctx, id);
             var newContact = new Contact();
             newContact.Accepted = false;

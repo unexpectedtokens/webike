@@ -1,4 +1,4 @@
-@model webike.Models.Workout
+@model webike.ViewModels.WorkoutViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -12,40 +12,53 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Workout.Title)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Workout.Title)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Difficulty)
+            @Html.DisplayNameFor(model => model.Workout.Difficulty)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Difficulty)
+            @Html.DisplayFor(model => model.Workout.Difficulty)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SuitableBikeType)
+            @Html.DisplayNameFor(model => model.Workout.SuitableBikeType)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SuitableBikeType)
+            @Html.DisplayFor(model => model.Workout.SuitableBikeType)
         </dd>
     </dl>
 </div>
 <div>
 
-@if (userIsOwner){
-        <a asp-action="Edit" asp-route-id="@Model.EventActivityID">Edit</a>
-}
-
-    <a asp-action="Index">Back to List</a>
-</div>
-
-
-<div>
-    @foreach (var item in Model.Ratings)
-    {
-        <p>@item.Cyclist.Alias</p>
-        <p>Rating van: @item.Number</p>
-        <p>@item.Description</p>
+<div class="container">
+    <hr/>
+    @if(!userIsOwner){
+        <form method="post" action="/Workout/CreateRating/@Model.Workout.EventActivityID">
+            <div>
+                <label>Nummer van 1 tot 5:</label>
+                @Html.TextBoxFor(m => m.NewRating.Number, new { @type = "number", @min="1", @max="5" })
+            </div>
+            <div>
+                <label>Tekst</label>
+                @Html.TextAreaFor(m => m.NewRating.Description)
+            </div>
+            <input type="submit" value="Deel ervaring"/>
+        </form>
+        //@Html.TextBoxFor(i => i.Port) 
     }
+    <div>
+        @foreach (var item in Model.Workout.Ratings)
+        {
+            <div>
+
+                <hr/>
+                <p>@item.Cyclist.Alias</p>
+                <p>Rating van: @item.Number</p>
+                <p>@item.Description</p>
+            </div>
+        }
+    </div>
 </div>

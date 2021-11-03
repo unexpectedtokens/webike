@@ -7,13 +7,24 @@
 
     <div>
         <h3>Jouw contacten:</h3>
-
+        <div>
+            @foreach (var item in Model.Contacts)
+            {
+                <p>@item.Sender.Alias</p>
+            }
+        </div>
         <p>contacten hier</p>
     </div>
      <div>
         <h3>Fietsers:</h3>
 
-        <p>contacten hier</p>
+        <div>
+            @foreach (var item in Model.Cyclists)
+            {
+                <p>@item.Alias</p>
+                <a href="Contact/Add/@item.UserID">Voeg toe als vriend</a>
+            }
+        </div>
     </div>
 
 </div>

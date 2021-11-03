@@ -30,7 +30,7 @@ namespace webike
                 options.Cookie.IsEssential = true;
             });
             services.AddControllersWithViews();
-            services.AddDbContext<WebikeContext>(options=>options.UseSqlServer(Configuration.GetConnectionString("gotchaConString")));
+            services.AddDbContext<WebikeContext>(options=>options.UseSqlServer(Configuration.GetConnectionString("webikeConString")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

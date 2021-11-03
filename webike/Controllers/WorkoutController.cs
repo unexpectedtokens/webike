@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using webike.Models;
-
+using webike.ViewModels;
 namespace webike.Controllers
 {
     public class WorkoutController : Controller
@@ -38,8 +38,9 @@ namespace webike.Controllers
             {
                 return NotFound();
             }
-
-            return View(workout);
+            var @vm = new WorkoutViewModel();
+            @vm.Workout = workout;
+            return View(@vm);
         }
 
         // GET: Workout/Create
@@ -55,13 +56,9 @@ namespace webike.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EventActivityID,Title,Difficulty,SuitableBikeType")] Workout workout)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(workout);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(workout);
+            _context.Add(workout);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Workout/Edit/5
@@ -142,6 +139,25 @@ namespace webike.Controllers
             _context.Workouts.Remove(workout);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> CreateRating(int? id, WorkoutViewModel workoutViewModel){
+            if(id == null){
+                return Redirect(nameof(Index));
+            }
+            var curUserID = HttpContext.Session.GetInt32("userid");
+            if(curUserID == null){
+                return RedirectToAction("Index", "Auth");
+            }
+            var curUser = await _context.Cyclists.FirstOrDefaultAsync(c => c.UserID == curUserID);
+            var wo = await _context.Workouts.Include(r => r.Ratings).FirstOrDefaultAsync(r => r.EventActivityID == id);
+            Console.WriteLine(wo.EventActivityID);
+            workoutViewModel.NewRating.Cyclist = curUser;
+            wo.Ratings.Add(workoutViewModel.NewRating);
+            _context.SaveChanges();
+            return Redirect($"/Workout/Details/{id}");
         }
 
         private bool WorkoutExists(int id)

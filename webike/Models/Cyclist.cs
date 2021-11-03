@@ -10,7 +10,7 @@ namespace webike.Models
 
         public static Cyclist GetCyclistFromID (WebikeContext ctx, int id)
         {
-            return ctx.Cyclists.Include(c => c.Contacts).Where(c => c.UserID == id).FirstOrDefault();
+            return ctx.Cyclists.Include(c => c.Contacts).ThenInclude(c => c.Sender).Where(c => c.UserID == id).FirstOrDefault();
         }
     }
 }
