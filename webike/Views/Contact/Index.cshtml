@@ -16,9 +16,9 @@
                 {
                     @if(Model.CurUserName == item.Receiver.Alias)
                     {
-                        <p>@item.Sender.Alias</p>
+                        <p>@item.Sender.FirstName @item.Sender.LastName</p>
                     }else{
-                        <p>@item.Receiver.Alias</p>
+                        <p>@item.Receiver.FirstName @item.Receiver.LastName</p>
                     }
                     
                 }

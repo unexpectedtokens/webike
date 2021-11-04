@@ -36,8 +36,10 @@ namespace webike.Controllers
             contacts.ForEach(x=>{                
                  toExcludeContactIDS.Add(x.Sender.UserID);  
                  Console.WriteLine(x.Sender.Alias);
+                 toExcludeContactIDS.Add(x.Receiver.UserID);
                  Console.WriteLine(x.Receiver.Alias);
                  if(x.Accepted){
+                     
                      vm.Contacts.Add(x);
                  }else{
                      if(x.Receiver.UserID == curCyc.UserID)
@@ -81,10 +83,10 @@ namespace webike.Controllers
             //         }    
             //     }
             // }                
-            // foreach(var item in toExcludeContactIDS)
-            // {
-            //     Console.WriteLine(item);
-            // }
+            foreach(var item in toExcludeContactIDS)
+            {
+                Console.WriteLine(item);
+            }
             vm.Cyclists = _ctx.Cyclists.Where(x => !toExcludeContactIDS.Contains(x.UserID)).ToList();
             vm.CurUserName = curCyc.Alias;
             return View(vm);

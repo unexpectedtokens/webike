@@ -2,12 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-
+using webike.Models;
 namespace webike.Controllers
 {
     public class HomeController : Controller
     {
+
+
+        private WebikeContext _ctx {get;set;}
+
+        public HomeController(WebikeContext ctx)
+        {
+            _ctx = ctx;
+        }
         public IActionResult Index()
         {
             return View();
