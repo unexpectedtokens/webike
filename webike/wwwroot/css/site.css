@@ -120,9 +120,32 @@ body {
     width: 400px;
     margin: 40px;
     text-align: center;
-    justify-content: !important flex-end;
+    justify-content: flex-end !important;
 }
 
 .btn-link {
     padding: 0 !important;
 }
+
+/* HomePage styles
+-------------------------------------------------- */
+.homePageContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.flexbox-item-event{
+    width: 200px;
+    margin: 10px;
+    border: 3px solid #333;
+    min-height: 200px;
+}
+.flexbox-item-training {
+    width: 200px;
+    margin: 10px;
+    border: 3px solid #333;
+    min-height: 200px;
+}
+
+
+
