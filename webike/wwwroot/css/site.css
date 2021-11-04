@@ -69,3 +69,60 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+
+/* Landing page */
+
+.flexbox-containerLanding{
+    display:flex;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+}
+.flexbox-itemLanding1{
+    width: 400px;
+    margin: 40px;
+    text-align: center;
+}
+.flexbox-itemLanding2, .flexbox-itemLanding3, .flexbox-itemLanding4 {
+    width: 400px;
+    margin: 10px;
+}
+.btn-link{
+    padding: 0 !important;
+}
+
+
+/* Exercises */
+
+.flexbox-containerEvent {
+    display: flex;
+    justify-content: flex-start;
+    align-content: center;
+    align-items: flex-start;
+}
+
+.flexbox-itemEvent1 {
+    width: 400px;
+    margin: 40px;
+    text-align: center;
+}
+
+.flexbox-itemEvent2, .flexbox-itemEvent3, .flexbox-itemEvent4 {
+    width: 150px;
+    height: 150px;
+    margin: 10px;
+    border: 3px solid black;
+    text-align: center;
+}
+
+.flexbox-itemEvent5 {
+    width: 400px;
+    margin: 40px;
+    text-align: center;
+    justify-content: !important flex-end;
+}
+
+.btn-link {
+    padding: 0 !important;
+}
