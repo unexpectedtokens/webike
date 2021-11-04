@@ -4,34 +4,60 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+ <div class="flexbox-container flexbox-containerLanding">
+
+        <div class="flexbox-item flexbox-itemLanding1">
+            <h1 class="display-4">Oefeningen</h1>
+
+        </div>
+
+    </div>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartLocation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Public)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
+
+<div class="flexbox-container flexbox-containerEvent">
+    @foreach (var item in Model) {
+        <div class="flexbox-item flexbox-itemEvent2">
+            <button type="button" class="btn btn-link">Oefeningnaam</button>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
+        @* <div class="flexbox-item flexbox-itemEvent2">
+            <button type="button" class="btn btn-link">Oefeningnaam</button>
+        </div>
+
+        <div class="flexbox-item flexbox-itemEvent3">
+            <button type="button" class="btn btn-link">Oefeningnaam</button>
+        </div>
+
+        <div class="flexbox-item flexbox-itemEvent4">
+            <button type="button" class="btn btn-link">Oefeningnaam</button>
+        </div>*@
+
+        <div class="flexbox-item flexbox-itemEvent5">
+            <select name="filterDropDown" id="filterDropDown">
+                <option value="All">Alle oefeningen</option>
+                <option value="Friends">Oefeningen van vrienden</option>
+            </select>
+        </div> 
+
+
+    </div>
+@* @foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
@@ -54,6 +80,5 @@
                 <a asp-action="Delete" asp-route-id="@item.EventID">Delete</a>
             </td>
         </tr>
-}
-    </tbody>
-</table>
+} *@
+   

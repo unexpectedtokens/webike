@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using webike.Models;
+using webike.ViewModels;
+using System.Linq;
 namespace webike.Controllers
 {
     public class HomeController : Controller
@@ -17,7 +19,12 @@ namespace webike.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+
+            var @vm = new HomeViewModel();
+            @vm.Events = (from b in _ctx.Events select b).Take(4).ToList();
+            @vm.Workouts = (from b in _ctx.Workouts select b).Take(4).ToList();
+            @vm.Routes = (from b in _ctx.Routes select b).Take(4).ToList();
+            return View(@vm);
         }
         public IActionResult Account()
         {
