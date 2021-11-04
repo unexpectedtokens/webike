@@ -4,38 +4,39 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="flexbox-container flexbox-containerLanding">
 
-<p>
+        <div class="flexbox-item flexbox-itemLanding1">
+            <h1 class="display-4">Oefeningen</h1>
+
+        </div>
+
+    </div>
+
+@* <p>
     <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ExcerciseID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ExcerciseID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ExcerciseID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+</p> *@
+
+<div class="flexbox-container">
+<div class="flexbox-containerEvent">
+       
+    @foreach (var item in Model) {
+            <a href="Excercise/Details/@item.ExcerciseID" class="flexbox-item flexbox-itemEvent2 card">
+                <button type="button" class="btn btn-link">@item.Title</button>
+            </a>
+    }
+</div>
+
+<div>
+ <div class="flexbox-item flexbox-itemEvent5">
+            <select name="filterDropDown" id="filterDropDown">
+                <option value="All">Alle oefeningen</option>
+                <option value="Friends">Oefeningen van vrienden</option>
+            </select>
+        </div>
+
+      <div class="flexbox-item flexbox-itemEvent5">
+            <a asp-controller="Excercise" asp-action="Create" class="btn btn-light">Toevoegen oefening</a>
+        </div>
+</div>
+</div>

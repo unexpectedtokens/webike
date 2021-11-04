@@ -1,7 +1,7 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-*{
+* {
   box-sizing: border-box;
 }
 
@@ -16,13 +16,20 @@ a {
   color: #0366d6;
 }
 
+.card {
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
@@ -47,7 +54,7 @@ html {
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.05);
 }
 
 button.accept-policy {
@@ -74,83 +81,94 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
-
 /* Landing page */
 
-.flexbox-containerLanding{
-    display:flex;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
+.flexbox-containerLanding {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
 }
-.flexbox-itemLanding1{
-    width: 400px;
-    margin: 40px;
-    text-align: center;
+.flexbox-itemLanding1 {
+  width: 400px;
+  margin: 40px;
+  text-align: center;
 }
-.flexbox-itemLanding2, .flexbox-itemLanding3, .flexbox-itemLanding4 {
-    width: 400px;
-    margin: 10px;
+.flexbox-itemLanding2,
+.flexbox-itemLanding3,
+.flexbox-itemLanding4 {
+  width: 400px;
+  margin: 10px;
 }
-.btn-link{
-    padding: 0 !important;
+.btn-link {
+  padding: 0 !important;
 }
-
 
 /* Exercises */
 
 .flexbox-containerEvent {
-    display: flex;
-    justify-content: flex-start;
-    align-content: center;
-    align-items: flex-start;
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+  align-items: flex-start;
 }
 
 .flexbox-itemEvent1 {
-    width: 400px;
-    margin: 40px;
-    text-align: center;
+  width: 400px;
+  margin: 40px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  text-align: center;
 }
 
-.flexbox-itemEvent2, .flexbox-itemEvent3, .flexbox-itemEvent4 {
-    width: 150px;
-    height: 150px;
-    margin: 10px;
-    border: 3px solid black;
-    text-align: center;
+.flexbox-itemEvent2,
+.flexbox-itemEvent3,
+.flexbox-itemEvent4 {
+  width: 150px;
+  height: 150px;
+  margin: 10px;
+
+  text-align: center;
 }
 
 .flexbox-itemEvent5 {
-    width: 400px;
-    margin: 40px;
-    text-align: center;
-    justify-content: flex-end !important;
+  width: 400px;
+  margin: 40px;
+  text-align: center;
+  justify-content: flex-end !important;
 }
 
 .btn-link {
-    padding: 0 !important;
+  padding: 0 !important;
 }
 
 /* HomePage styles
 -------------------------------------------------- */
-.homePageContainer{
-    display: flex;
-    flex-direction: row;
+.homePageContainer {
+  display: flex;
+  flex-direction: row;
 }
 
-.flexbox-item-event{
-    width: 200px;
-    margin: 10px;
-    padding
-    border: 3px solid #333;
-    min-height: 200px;
+.flexbox-item-event {
+  width: 200px;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  min-height: 200px;
 }
 .flexbox-item-training {
-    width: 200px;
-    margin: 10px;
-    border: 3px solid #333;
-    min-height: 200px;
+  width: 200px;
+  margin: 10px;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  min-height: 200px;
 }
 
+/*Reuables*/
 
-
+.flexbox-container {
+  display: flex;
+}

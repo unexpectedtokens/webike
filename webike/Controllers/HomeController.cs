@@ -19,7 +19,6 @@ namespace webike.Controllers
         }
         public IActionResult Index()
         {
-
             var @vm = new HomeViewModel();
             @vm.Events = (from b in _ctx.Events select b).Take(4).ToList();
             @vm.Workouts = (from b in _ctx.Workouts select b).Take(4).ToList();

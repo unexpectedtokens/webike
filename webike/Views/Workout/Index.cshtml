@@ -4,44 +4,39 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+  <div class="flexbox-container flexbox-containerLanding">
 
+        <div class="flexbox-item flexbox-itemLanding1">
+            <h1 class="display-4">Trainingen</h1>
+
+        </div>
+
+    </div>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Difficulty)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SuitableBikeType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Difficulty)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SuitableBikeType)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EventActivityID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EventActivityID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EventActivityID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+
+<div class="flexbox-container">
+    <div class="flexbox-container flexbox-containerEvent">
+        @foreach (var item in Model) {
+            <a href="/Workout/Details/@item.EventActivityID" class="flexbox-item flexbox-itemEvent2">
+                <button type="button" class="btn btn-link">@item.Title</button>
+            </a>
+        }
+    </div>
+
+
+    <div>
+         <div class="flexbox-item flexbox-itemEvent5">
+            <select name="filterDropDown" id="filterDropDown">
+                <option value="All">Alle trainingen</option>
+                <option value="Friends">Traingingen van vrienden</option>
+            </select>
+        </div>
+        <div class="flexbox-item flexbox-itemEvent5">
+            <a href="/Workout/Create" class="btn btn-light">Toevoegen training</a>
+        </div>
+    </div>
+
+</div>

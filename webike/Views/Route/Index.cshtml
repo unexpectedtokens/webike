@@ -4,69 +4,45 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<div class="flexbox-container flexbox-containerLanding">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.StartPoint)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndPoint)
-            </th>
-            
-            <th>
-                @Html.DisplayNameFor(model => model.Duration)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Addition)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Difficulty)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SuitableBikeType)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartPoint)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndPoint)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Duration)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Addition)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Difficulty)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SuitableBikeType)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.EventActivityID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.EventActivityID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.EventActivityID">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <div class="flexbox-item flexbox-itemLanding1">
+            <h1 class="display-4">Routes</h1>
+
+        </div>
+
+    </div>
+
+    
+<div class="flexbox-container">
+ <div class="flexbox-container flexbox-containerEvent">
+        @if(Model.Count() == 0){
+            <p>Er zijn nog geen routes</p>
+        }else{
+            @foreach (var item in Model) {
+             <a href="/Route/Details/@item.EventActivityID" class="flexbox-item flexbox-itemEvent2 card">
+            <button type="button" class="btn btn-link">@item.Title</button>
+        </a>
+        }
+        
+        }
+  
+        
+
+       
+
+
+    </div>
+
+    <div  flexbox-containerEvent">
+        <div class="flexbox-item flexbox-itemEvent5">
+            <select name="filterDropDown" id="filterDropDown">
+                <option value="All">Alle routes</option>
+                <option value="Friends">routes van vrienden</option>
+            </select>
+        </div>
+        <a asp-action="Create">Maak een nieuwe route aan</a>
+    </div>
+
+</div>
+  

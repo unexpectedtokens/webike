@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
- <div class="flexbox-container flexbox-containerLanding">
+ <div class="flexbox-containerLanding">
 
         <div class="flexbox-item flexbox-itemLanding1">
             <h1 class="display-4">Oefeningen</h1>
@@ -17,11 +17,13 @@
     <a asp-action="Create">Create New</a>
 </p>
 
-<div class="flexbox-container flexbox-containerEvent">
+
+<div class="flexbox-container">
+<div class="flexbox-containerEvent">
     @foreach (var item in Model) {
-        <div class="flexbox-item flexbox-itemEvent2">
-            <button type="button" class="btn btn-link">Oefeningnaam</button>
-        </div>
+        <a href="/Event/Details/@item.EventID" class="flexbox-item flexbox-itemEvent2 card">
+            <button type="button" class="btn btn-link">@item.Title</button>
+        </a>
 
 
 
@@ -57,6 +59,7 @@
 
 
     </div>
+</div>
 @* @foreach (var item in Model) {
         <tr>
             <td>

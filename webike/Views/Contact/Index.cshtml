@@ -3,7 +3,6 @@
 
 <div class="container">
 
-    <h1>Contacten</h1>
 
     <div>
         <h3>Jouw contacten:</h3>
@@ -14,6 +13,7 @@
             }else{
                 @foreach (var item in Model.Contacts)
                 {
+                    <hr/>
                     @if(Model.CurUserName == item.Receiver.Alias)
                     {
                         <p>@item.Sender.FirstName @item.Sender.LastName</p>
