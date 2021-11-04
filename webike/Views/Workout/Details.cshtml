@@ -2,7 +2,7 @@
 
 @{
     ViewData["Title"] = "Details";
-    var userIsOwner = false;
+ 
 }
 
 <h1>Details</h1>
@@ -34,8 +34,34 @@
 <div>
 
 <div class="container">
+    
+    <h3>Oefeningen:</h3>
+    <div>
+        @foreach (var item in Model.Workout.Excercises)
+        {
+            <p>@item.Title</p>
+            <p>@item.Description</p>
+        }
+    </div>
+    @if(Model.UserIsOwner)
+    {
+        <div>
+            @foreach (var item in Model.ExcercisesToAdd)
+            {
+                <div>
+                    <p>@item.Title</p>
+                    <p>@item.Description</p>
+                    <a href="/Workout/AddExcToWorkout/@Model.Workout.EventActivityID?excsid=@item.ExcerciseID">Voeg oefening toe aan training</a>
+                </div>
+            }
+        </div>
+    }
+
+</div>
+
+<div class="container">
     <hr/>
-    @if(!userIsOwner){
+    @if(!Model.UserIsOwner){
         <form method="post" action="/Workout/CreateRating/@Model.Workout.EventActivityID">
             <div>
                 <label>Nummer van 1 tot 5:</label>

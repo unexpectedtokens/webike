@@ -18,8 +18,9 @@ namespace webike.Models
         public string City {get;set;}
         public bool IsCoach {get;set;}
         public bool WantsToBeCoach {get;set;}
-        public string Events {get;set;}
-        public List<Contact> Contacts {get;set;}
+        //public string Events {get;set;}
+        
+        //public List<Contact> Contacts {get;set;}
         public void BecomeCoachRequest(WebikeContext ctx)
         {
             this.WantsToBeCoach = true;

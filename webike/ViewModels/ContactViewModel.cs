@@ -10,6 +10,8 @@ namespace webike.ViewModels{
         public List<Cyclist> Cyclists {get;set;}
         public List<Contact> Contacts {get;set;}
 
+        public List<Contact> PendingContacts {get;set;}
+        public string CurUserName {get;set;}
     }
 
 }

@@ -8,22 +8,59 @@
     <div>
         <h3>Jouw contacten:</h3>
         <div>
-            @foreach (var item in Model.Contacts)
+            @if(Model.Contacts.Count == 0)
             {
-                <p>@item.Sender.Alias</p>
+                <p>Je hebt nog geen contacten</p>
+            }else{
+                @foreach (var item in Model.Contacts)
+                {
+                    @if(Model.CurUserName == item.Receiver.Alias)
+                    {
+                        <p>@item.Sender.Alias</p>
+                    }else{
+                        <p>@item.Receiver.Alias</p>
+                    }
+                    
+                }
             }
+            
         </div>
-        <p>contacten hier</p>
+        
     </div>
-     <div>
-        <h3>Fietsers:</h3>
+    <div>
+        <h3>Jouw contactverzoeken</h3>
+        <div>
+            @if(Model.PendingContacts.Count == 0)
+            {
+                <p>Je hebt nog geen contactverzoeken</p>
+            }else{
+                @foreach (var item in Model.PendingContacts)
+                {
+                    <hr/>
+                    <p>@item.Sender.Alias</p>
+                    <a href="Contact/Accept/@item.ContactID">Accepteer contactverzoek</a>
+                    <a href="Contact/Reject/@item.ContactID">Wijs Contactverzoek af</a>
+                }
+            }
+            
+        </div>
+    </div>
+    <div>
+        <h3>Fietsers die je misschien toe wilt voegen:</h3>
 
         <div>
-            @foreach (var item in Model.Cyclists)
+            @if(Model.Cyclists.Count == 0)
             {
-                <p>@item.Alias</p>
-                <a href="Contact/Add/@item.UserID">Voeg toe als vriend</a>
+                <p>Geen fietsers gevonden</p>
+            }else{
+                @foreach (var item in Model.Cyclists)
+                {
+                    <hr/>
+                    <p>@item.Alias</p>
+                    <a href="Contact/Add/@item.UserID">Voeg toe als vriend</a>
+                }
             }
+            
         </div>
     </div>
 

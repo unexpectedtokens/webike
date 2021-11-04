@@ -12,6 +12,12 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Route.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Route.Title)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Route.StartPoint)
         </dt>
         <dd class = "col-sm-10">
@@ -35,12 +41,7 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Route.Addition)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Route.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Route.Title)
-        </dd>
+        
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Route.Difficulty)
         </dt>

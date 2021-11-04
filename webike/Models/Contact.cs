@@ -8,8 +8,11 @@ namespace webike.Models
     {
         [Key]
         public int ContactID {get;set;}
+
+        public User Receiver {get;set;}
+
+        
         public User Sender {get;set;}
-        [Required]
         public bool Accepted {get;set;}
 
 

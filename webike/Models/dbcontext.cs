@@ -1,7 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
 
-
 namespace webike.Models
 {
 
@@ -21,8 +20,11 @@ namespace webike.Models
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder){
+            modelBuilder.Entity<Event>().HasMany(e => e.Attendees).WithMany( a => a.EventsPartOf);
+            modelBuilder.Entity<Workout>().HasMany(w => w.Excercises).WithMany(e => e.WorkoutsPartOf);
+            modelBuilder.Entity<Event>().HasOne(e => e.Manager).WithMany(m => m.EventManaging);
+            modelBuilder.Entity<Cyclist>().HasMany(c => c.EventManaging).WithOne(e => e.Manager).OnDelete(DeleteBehavior.Restrict);
+        }        
     }
-
-
-
 }

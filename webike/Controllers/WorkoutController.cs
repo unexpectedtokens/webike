@@ -31,16 +31,45 @@ namespace webike.Controllers
             {
                 return NotFound();
             }
-
-            var workout = await _context.Workouts.Include(w => w.Ratings).ThenInclude(r => r.Cyclist)
+            var curUserID = HttpContext.Session.GetInt32("userid");
+            if(curUserID == null){
+                return RedirectToAction("Index", "Auth");
+            }
+            var curUser = await _context.Cyclists.FirstOrDefaultAsync(c => c.UserID == curUserID);
+            var ExcToExcl = new List<int>();
+            var workout = await _context.Workouts.Include(w => w.Creator).Include(w => w.Excercises).Include(w => w.Ratings).ThenInclude(r => r.Cyclist)
                 .FirstOrDefaultAsync(m => m.EventActivityID == id);
             if (workout == null)
             {
                 return NotFound();
             }
+            foreach(var item in workout.Excercises)
+            {
+                ExcToExcl.Add(item.ExcerciseID);
+            }
             var @vm = new WorkoutViewModel();
             @vm.Workout = workout;
+            @vm.UserIsOwner = workout.UserIsOwner(curUser.Alias);
+            @vm.ExcercisesToAdd = await _context.Excercises.Where(e => !ExcToExcl.Contains(e.ExcerciseID)).ToListAsync();
             return View(@vm);
+        }
+
+
+        public async Task<IActionResult> AddExcToWorkout(int? id, int? excsid)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            if(excsid == null)
+            {
+                return Redirect("Workout");
+            }
+            var exc = await _context.Excercises.FirstOrDefaultAsync(e => e.ExcerciseID == excsid);
+            var workout = await _context.Workouts.Include(w => w.Excercises).FirstOrDefaultAsync(w => w.EventActivityID == id);
+            workout.Excercises.Add(exc);
+            _context.SaveChanges();
+            return Redirect($"/Workout/Details/{id}");
         }
 
         // GET: Workout/Create
@@ -56,6 +85,12 @@ namespace webike.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EventActivityID,Title,Difficulty,SuitableBikeType")] Workout workout)
         {
+            var curUserID = HttpContext.Session.GetInt32("userid");
+            if(curUserID == null){
+                return RedirectToAction("Index", "Auth");
+            }
+            var curUser = await _context.Cyclists.FirstOrDefaultAsync(c => c.UserID == curUserID);
+            workout.Creator = curUser;
             _context.Add(workout);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace webike.Models
 {
@@ -17,11 +19,11 @@ namespace webike.Models
         public string StartLocation { get; set; }
         [Required]
         public string Description { get; set; }
-        [Required]
-        public Cyclist Maneger { get; set; }
-        [Required]
+        [ForeignKey("Manager")]
+
+        public int? ManagerID {get;set;}
+        public Cyclist Manager { get; set; }
         public List<Cyclist> Attendees { get; set; }
-        [Required]
         public List<Rating> Ratings { get; set; }
 
         public bool Public {get;set;}

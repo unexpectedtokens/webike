@@ -20,5 +20,11 @@ namespace webike.Models
         public BikeType SuitableBikeType { get; set; }
 
         public List<Event> Events {get;set;}
+
+
+        public bool UserIsOwner(string alias)
+        {
+            return alias == Creator.Alias;
+        }
     }
 }

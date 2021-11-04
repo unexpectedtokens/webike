@@ -24,38 +24,71 @@ namespace webike.Controllers
             }
             var curCyc = Cyclist.GetCyclistFromID(_ctx, id);
             var vm = new ContactViewModel();
-            vm.Contacts = curCyc.Contacts;
-            List<int> toExcludeContactIDS = new List<int>(
-                curCyc.UserID
-            );
-
-            vm.Contacts.ForEach(x=>{
-                if(x.Accepted){
-                    toExcludeContactIDS.Add(x.Sender.UserID);
-                }
+            vm.Contacts = new List<Contact>();
+            vm.PendingContacts = new List<Contact>();
+            
+            List<int> toExcludeContactIDS = new List<int>{
+                curCyc.UserID,
+            };
+            var contacts = _ctx.Contacts.Include(c => c.Sender).Include(c => c.Receiver).Where(c => c.Sender.UserID == curCyc.UserID || c.Receiver.UserID == curCyc.UserID).ToList();
+            
+            
+            contacts.ForEach(x=>{                
+                 toExcludeContactIDS.Add(x.Sender.UserID);  
+                 Console.WriteLine(x.Sender.Alias);
+                 Console.WriteLine(x.Receiver.Alias);
+                 if(x.Accepted){
+                     vm.Contacts.Add(x);
+                 }else{
+                     if(x.Receiver.UserID == curCyc.UserID)
+                     {
+                         vm.PendingContacts.Add(x);
+                     }
+                 }              
             });
-            var contacts = _ctx.Cyclists.Include(c => c.Contacts).ThenInclude(c => c.Sender).Where(c => c.UserID != curCyc.UserID).ToList();
-            foreach(var x in contacts)
-            {
-                var isContact = false;
-                foreach(var c in x.Contacts)
-                {
-                    if(!isContact && c.Sender.UserID == curCyc.UserID){
-                        isContact = true;
-                        break;
-                    }
-                }
-                if (isContact){
-                    var newContact = new Contact();
-                    newContact.Sender = x;
-                    newContact.Accepted = true;
-                    vm.Contacts.Add(newContact);
-                }
-                
-                
-            }
-            vm.Cyclists = _ctx.Cyclists.Where(x => !toExcludeContactIDS.Contains(x.UserID)).ToList();;
+            // var contacts = _ctx.Cyclists.Include(c => c.Contacts).ThenInclude(c => c.Sender).Where(c => c.UserID != curCyc.UserID).ToList();
+            // foreach(var x in contacts)
+            // {
+            //     var isContact = false;
+            //     var isPending = false;
+            //     foreach(var c in x.Contacts)
+            //     {
+            //         if(c.Sender.UserID == curCyc.UserID){
+            //             if(c.Accepted){
+            //                 isContact = true;
+            //             }else{
+            //                 isPending = true;
+            //             }
+            //             break;
+            //         }
+            //     }
+            //     if(isContact || isPending)
+            //     {
+            //         toExcludeContactIDS.Add(x.UserID);
+            //         var newContact = new Contact();
+            //         newContact.Sender = x;
+            //         if(isContact)
+            //         {
+            //             newContact.Accepted = true;
+            //             vm.Contacts.Add(newContact);
+
+            //         }
+            //         if(isPending)
+            //         {
+            //             newContact.Accepted = false;
+                        
+            //             vm.PendingContacts.Add(newContact);
+            //         }    
+            //     }
+            // }                
+            // foreach(var item in toExcludeContactIDS)
+            // {
+            //     Console.WriteLine(item);
+            // }
+            vm.Cyclists = _ctx.Cyclists.Where(x => !toExcludeContactIDS.Contains(x.UserID)).ToList();
+            vm.CurUserName = curCyc.Alias;
             return View(vm);
+            
         }
 
 
@@ -73,11 +106,36 @@ namespace webike.Controllers
             var newContact = new Contact();
             newContact.Accepted = false;
             newContact.Sender = curCyc;
-            receivingCyc.Contacts.Add(newContact);
+            newContact.Receiver = receivingCyc;
+            _ctx.Contacts.Add(newContact);
             _ctx.SaveChanges();
             return RedirectToAction("Index", "Contact");
         }
 
+
+        public IActionResult Accept(int id)
+        {
+            var contact = _ctx.Contacts.FirstOrDefault(c => c.ContactID == id);
+            if(contact == null)
+            {
+                return NotFound();
+            }
+            contact.Accepted = true;
+            _ctx.SaveChanges();
+            return RedirectToAction("Index", "Contact");
+        }
+
+        public IActionResult Reject(int id)
+        {   
+            var contact = _ctx.Contacts.FirstOrDefault(c => c.ContactID == id);
+            if(contact == null)
+            {
+                return NotFound();
+            }
+            _ctx.Contacts.Remove(contact);
+            _ctx.SaveChanges();
+            return RedirectToAction("Index", "Contact");
+        }
 
     }
 

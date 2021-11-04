@@ -32,8 +32,12 @@ namespace webike.Controllers
             {
                 return NotFound();
             }
-
-            var route = await _context.Routes.Include(e => e.Ratings).ThenInclude(r => r.Cyclist)
+            var curUserID = HttpContext.Session.GetInt32("userid");
+            if(curUserID == null){
+                return RedirectToAction("Index", "Auth");
+            }
+            var curUser = await _context.Cyclists.FirstOrDefaultAsync(c => c.UserID == curUserID);
+            var route = await _context.Routes.Include(w => w.Creator).Include(e => e.Ratings).ThenInclude(r => r.Cyclist)
                 .FirstOrDefaultAsync(m => m.EventActivityID == id);
             if (route == null)
             {
@@ -41,6 +45,7 @@ namespace webike.Controllers
             }
             var @vm = new RouteViewModel();
             @vm.Route = route;
+            @vm.UserIsOwner = route.UserIsOwner(curUser.Alias);
             return View(@vm);
         }
 
@@ -57,10 +62,15 @@ namespace webike.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StartPoint,EndPoint,RouteDifficulty,Duration,Addition,EventActivityID,Title,Difficulty,SuitableBikeType")] Route route)
         {
+            var curUserID = HttpContext.Session.GetInt32("userid");
+            if(curUserID == null){
+                return RedirectToAction("Index", "Auth");
+            }
+            var curUser = await _context.Cyclists.FirstOrDefaultAsync(c => c.UserID == curUserID);
+            route.Creator = curUser;
             _context.Add(route);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        
         }
 
         // GET: Route/Edit/5

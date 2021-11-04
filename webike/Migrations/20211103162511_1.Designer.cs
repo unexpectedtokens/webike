@@ -10,8 +10,8 @@ using webike.Models;
 namespace webike.Migrations
 {
     [DbContext(typeof(WebikeContext))]
-    [Migration("20211101114406_fixedRatingRel")]
-    partial class fixedRatingRel
+    [Migration("20211103162511_1")]
+    partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,21 @@ namespace webike.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("CyclistEvent", b =>
+                {
+                    b.Property<int>("AttendeesUserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventsPartOfEventID")
+                        .HasColumnType("int");
+
+                    b.HasKey("AttendeesUserID", "EventsPartOfEventID");
+
+                    b.HasIndex("EventsPartOfEventID");
+
+                    b.ToTable("CyclistEvent");
+                });
 
             modelBuilder.Entity("webike.Models.Contact", b =>
                 {
@@ -31,10 +46,15 @@ namespace webike.Migrations
                     b.Property<bool>("Accepted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("ReceiverUserID")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SenderUserID")
                         .HasColumnType("int");
 
                     b.HasKey("ContactID");
+
+                    b.HasIndex("ReceiverUserID");
 
                     b.HasIndex("SenderUserID");
 
@@ -58,7 +78,7 @@ namespace webike.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ManegerUserID")
+                    b.Property<int?>("ManagerID")
                         .HasColumnType("int");
 
                     b.Property<bool>("Public")
@@ -76,7 +96,7 @@ namespace webike.Migrations
 
                     b.HasIndex("ActivityEventActivityID");
 
-                    b.HasIndex("ManegerUserID");
+                    b.HasIndex("ManagerID");
 
                     b.ToTable("Events");
                 });
@@ -195,9 +215,6 @@ namespace webike.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Events")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
@@ -233,9 +250,6 @@ namespace webike.Migrations
                     b.Property<string>("EndPoint")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RouteDifficulty")
-                        .HasColumnType("int");
-
                     b.Property<string>("StartPoint")
                         .HasColumnType("nvarchar(max)");
 
@@ -260,19 +274,35 @@ namespace webike.Migrations
                 {
                     b.HasBaseType("webike.Models.User");
 
-                    b.Property<int?>("EventID")
-                        .HasColumnType("int");
-
-                    b.HasIndex("EventID");
-
                     b.HasDiscriminator().HasValue("Cyclist");
+                });
+
+            modelBuilder.Entity("CyclistEvent", b =>
+                {
+                    b.HasOne("webike.Models.Cyclist", null)
+                        .WithMany()
+                        .HasForeignKey("AttendeesUserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("webike.Models.Event", null)
+                        .WithMany()
+                        .HasForeignKey("EventsPartOfEventID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("webike.Models.Contact", b =>
                 {
+                    b.HasOne("webike.Models.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverUserID");
+
                     b.HasOne("webike.Models.User", "Sender")
-                        .WithMany("Contacts")
+                        .WithMany()
                         .HasForeignKey("SenderUserID");
+
+                    b.Navigation("Receiver");
 
                     b.Navigation("Sender");
                 });
@@ -283,13 +313,14 @@ namespace webike.Migrations
                         .WithMany("Events")
                         .HasForeignKey("ActivityEventActivityID");
 
-                    b.HasOne("webike.Models.Cyclist", "Maneger")
-                        .WithMany()
-                        .HasForeignKey("ManegerUserID");
+                    b.HasOne("webike.Models.Cyclist", "Manager")
+                        .WithMany("EventManaging")
+                        .HasForeignKey("ManagerID")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("Activity");
 
-                    b.Navigation("Maneger");
+                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("webike.Models.EventActivity", b =>
@@ -331,17 +362,8 @@ namespace webike.Migrations
                     b.Navigation("Cyclist");
                 });
 
-            modelBuilder.Entity("webike.Models.Cyclist", b =>
-                {
-                    b.HasOne("webike.Models.Event", null)
-                        .WithMany("Attendees")
-                        .HasForeignKey("EventID");
-                });
-
             modelBuilder.Entity("webike.Models.Event", b =>
                 {
-                    b.Navigation("Attendees");
-
                     b.Navigation("Ratings");
                 });
 
@@ -352,14 +374,14 @@ namespace webike.Migrations
                     b.Navigation("Ratings");
                 });
 
-            modelBuilder.Entity("webike.Models.User", b =>
-                {
-                    b.Navigation("Contacts");
-                });
-
             modelBuilder.Entity("webike.Models.Workout", b =>
                 {
                     b.Navigation("Excercises");
+                });
+
+            modelBuilder.Entity("webike.Models.Cyclist", b =>
+                {
+                    b.Navigation("EventManaging");
                 });
 #pragma warning restore 612, 618
         }

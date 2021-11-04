@@ -19,6 +19,36 @@ namespace webike.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("CyclistEvent", b =>
+                {
+                    b.Property<int>("AttendeesUserID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventsPartOfEventID")
+                        .HasColumnType("int");
+
+                    b.HasKey("AttendeesUserID", "EventsPartOfEventID");
+
+                    b.HasIndex("EventsPartOfEventID");
+
+                    b.ToTable("CyclistEvent");
+                });
+
+            modelBuilder.Entity("ExcerciseWorkout", b =>
+                {
+                    b.Property<int>("ExcercisesExcerciseID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkoutsPartOfEventActivityID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ExcercisesExcerciseID", "WorkoutsPartOfEventActivityID");
+
+                    b.HasIndex("WorkoutsPartOfEventActivityID");
+
+                    b.ToTable("ExcerciseWorkout");
+                });
+
             modelBuilder.Entity("webike.Models.Contact", b =>
                 {
                     b.Property<int>("ContactID")
@@ -29,10 +59,15 @@ namespace webike.Migrations
                     b.Property<bool>("Accepted")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("ReceiverUserID")
+                        .HasColumnType("int");
+
                     b.Property<int?>("SenderUserID")
                         .HasColumnType("int");
 
                     b.HasKey("ContactID");
+
+                    b.HasIndex("ReceiverUserID");
 
                     b.HasIndex("SenderUserID");
 
@@ -56,7 +91,7 @@ namespace webike.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ManegerUserID")
+                    b.Property<int?>("ManagerID")
                         .HasColumnType("int");
 
                     b.Property<bool>("Public")
@@ -74,7 +109,7 @@ namespace webike.Migrations
 
                     b.HasIndex("ActivityEventActivityID");
 
-                    b.HasIndex("ManegerUserID");
+                    b.HasIndex("ManagerID");
 
                     b.ToTable("Events");
                 });
@@ -128,14 +163,9 @@ namespace webike.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("WorkoutEventActivityID")
-                        .HasColumnType("int");
-
                     b.HasKey("ExcerciseID");
 
                     b.HasIndex("CreatorUserID");
-
-                    b.HasIndex("WorkoutEventActivityID");
 
                     b.ToTable("Excercises");
                 });
@@ -191,9 +221,6 @@ namespace webike.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Events")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
@@ -255,19 +282,50 @@ namespace webike.Migrations
                 {
                     b.HasBaseType("webike.Models.User");
 
-                    b.Property<int?>("EventID")
-                        .HasColumnType("int");
-
-                    b.HasIndex("EventID");
-
                     b.HasDiscriminator().HasValue("Cyclist");
+                });
+
+            modelBuilder.Entity("CyclistEvent", b =>
+                {
+                    b.HasOne("webike.Models.Cyclist", null)
+                        .WithMany()
+                        .HasForeignKey("AttendeesUserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("webike.Models.Event", null)
+                        .WithMany()
+                        .HasForeignKey("EventsPartOfEventID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ExcerciseWorkout", b =>
+                {
+                    b.HasOne("webike.Models.Excercise", null)
+                        .WithMany()
+                        .HasForeignKey("ExcercisesExcerciseID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("webike.Models.Workout", null)
+                        .WithMany()
+                        .HasForeignKey("WorkoutsPartOfEventActivityID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("webike.Models.Contact", b =>
                 {
+                    b.HasOne("webike.Models.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverUserID");
+
                     b.HasOne("webike.Models.User", "Sender")
-                        .WithMany("Contacts")
+                        .WithMany()
                         .HasForeignKey("SenderUserID");
+
+                    b.Navigation("Receiver");
 
                     b.Navigation("Sender");
                 });
@@ -278,13 +336,14 @@ namespace webike.Migrations
                         .WithMany("Events")
                         .HasForeignKey("ActivityEventActivityID");
 
-                    b.HasOne("webike.Models.Cyclist", "Maneger")
-                        .WithMany()
-                        .HasForeignKey("ManegerUserID");
+                    b.HasOne("webike.Models.Cyclist", "Manager")
+                        .WithMany("EventManaging")
+                        .HasForeignKey("ManagerID")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Activity");
 
-                    b.Navigation("Maneger");
+                    b.Navigation("Manager");
                 });
 
             modelBuilder.Entity("webike.Models.EventActivity", b =>
@@ -301,10 +360,6 @@ namespace webike.Migrations
                     b.HasOne("webike.Models.Cyclist", "Creator")
                         .WithMany()
                         .HasForeignKey("CreatorUserID");
-
-                    b.HasOne("webike.Models.Workout", null)
-                        .WithMany("Excercises")
-                        .HasForeignKey("WorkoutEventActivityID");
 
                     b.Navigation("Creator");
                 });
@@ -326,17 +381,8 @@ namespace webike.Migrations
                     b.Navigation("Cyclist");
                 });
 
-            modelBuilder.Entity("webike.Models.Cyclist", b =>
-                {
-                    b.HasOne("webike.Models.Event", null)
-                        .WithMany("Attendees")
-                        .HasForeignKey("EventID");
-                });
-
             modelBuilder.Entity("webike.Models.Event", b =>
                 {
-                    b.Navigation("Attendees");
-
                     b.Navigation("Ratings");
                 });
 
@@ -347,14 +393,9 @@ namespace webike.Migrations
                     b.Navigation("Ratings");
                 });
 
-            modelBuilder.Entity("webike.Models.User", b =>
+            modelBuilder.Entity("webike.Models.Cyclist", b =>
                 {
-                    b.Navigation("Contacts");
-                });
-
-            modelBuilder.Entity("webike.Models.Workout", b =>
-                {
-                    b.Navigation("Excercises");
+                    b.Navigation("EventManaging");
                 });
 #pragma warning restore 612, 618
         }
