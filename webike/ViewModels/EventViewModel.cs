@@ -10,6 +10,10 @@ namespace webike.ViewModels
 
         public int SelectedEventActivityID {get;set;}
 
+        public string CurUserAlias {get;set;}
+        public bool ActivityIsWorkout {get;set;}
+        public List<Route> PotenRoutes {get;set;}
+        public List<Workout> PotenWorkouts {get;set;}
 
     }
 }

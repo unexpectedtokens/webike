@@ -25,29 +25,29 @@ namespace webike.Controllers
             @vm.Routes = (from b in _ctx.Routes select b).Take(4).ToList();
             return View(@vm);
         }
-        public IActionResult Account()
-        {
-            return View();
-        }
-        public IActionResult Contact()
-        {
-            return View();
-        }
-        public IActionResult Event()
-        {
-            return View();
-        }
-        public IActionResult Exercise()
-        {
-            return View();
-        }
-        public IActionResult Route()
-        {
-            return View();
-        }
-        public IActionResult Training()
-        {
-            return View();
-        }
+        // public IActionResult Account()
+        // {
+        //     return View();
+        // }
+        // public IActionResult Contact()
+        // {
+        //     return View();
+        // }
+        // public IActionResult Event()
+        // {
+        //     return View();
+        // }
+        // public IActionResult Exercise()
+        // {
+        //     return View();
+        // }
+        // public IActionResult Route()
+        // {
+        //     return View();
+        // }
+        // public IActionResult Training()
+        // {
+        //     return View();
+        // }
     }
 }

@@ -1,52 +1,101 @@
-@model webike.Models.Event
+@model webike.ViewModels.EventViewModel;
 
 @{
     ViewData["Title"] = "Details";
-    var userIsOwner = false;
+    var userIsOwner = Model.Event.UserIsOwner(Model.CurUserAlias);
+
+    var typeOfActivity = @Model.ActivityIsWorkout ? "training" : "route";
+    
 }
 
 
 <div>
-    <h1>@Model.Title</h1>
+    <h1>@Model.Event.Title</h1>
     <hr />
     <dl class="row">
         @* <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Event.Title)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Event.Title)
         </dd> *@
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayNameFor(model => model.Event.Description)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayFor(model => model.Event.Description)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
+            @Html.DisplayNameFor(model => model.Event.Date)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Date)
+            @Html.DisplayFor(model => model.Event.Date)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartLocation)
+            @Html.DisplayNameFor(model => model.Event.StartLocation)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartLocation)
+            @Html.DisplayFor(model => model.Event.StartLocation)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Public)
+            @Html.DisplayNameFor(model => model.Event.Public)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Public)
+            @Html.DisplayFor(model => model.Event.Public)
         </dd>
     </dl>
 </div>
 
 
 <div>
+    @if(Model.Event.Activity == null){
+        <p>Er is nog geen activiteit aan dit event toegevoegd.</p>
+        @if(userIsOwner)
+        {
+            <div>
+                <h4>Voeg een activiteit toe aan dit event:</h4>
+                <div>
+                    <h5>Routes</h5>
+                    <div>
+                        @foreach (var item in Model.PotenRoutes)
+                        {
+                            <div class="card">
+                                <h6>@item.Title</h6>
+                                <a href="/Event/AddAct/@Model.Event.EventID?actid=@item.EventActivityID?typeoa=route">Voeg toe aan dit event</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <h5>Trainingen</h5>
+                    <div>
+                        @foreach (var item in Model.PotenWorkouts)
+                        {
+                            <div class="card">
+                                <h6>@item.Title</h6>
+                                <a href="/Event/AddAct/@Model.Event.EventID?actid=@item.EventActivityID&typeoa=workout">Voeg toe aan dit event</a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+        }
+        
+    }else{
+        <p>De activiteit die wordt uitgevoerd is een @typeOfActivity:</p>
+        <h4>@Model.Event.Activity.Title</h4>
+        <a>Verwijder deze activiteit uit deze activiteit</a>
+    }
+    
+        
+        
+         
+</div>
+
+<div>
     @{
-        foreach (var item in Model.Ratings)
+        foreach (var item in Model.Event.Ratings)
         {
             <p>@item.Cyclist.Alias</p>
             <p>Rating van: @item.Number</p>
@@ -56,7 +105,7 @@
 </div>
 @if(userIsOwner){
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.EventID">Edit</a>    
+        <a asp-action="Edit" asp-route-id="@Model.Event.EventID">Edit</a>    
     </div>
 }
 <a asp-action="Index">Back to List</a>

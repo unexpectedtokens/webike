@@ -20,7 +20,7 @@
 <div class="flexbox-container">
     <div class="flexbox-container flexbox-containerEvent">
         @foreach (var item in Model) {
-            <a href="/Workout/Details/@item.EventActivityID" class="flexbox-item flexbox-itemEvent2">
+            <a href="/Workout/Details/@item.EventActivityID" class="flexbox-item flexbox-itemEvent2 card">
                 <button type="button" class="btn btn-link">@item.Title</button>
             </a>
         }

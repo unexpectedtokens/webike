@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using webike.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using webike.Models;
-
+using Microsoft.AspNetCore.Http;
 namespace webike.Controllers
 {
     public class EventController : Controller
@@ -31,15 +31,26 @@ namespace webike.Controllers
             {
                 return NotFound();
             }
-
-            var @event = await _context.Events.Include(e => e.Ratings).ThenInclude(r => r.Cyclist)
+            var uid = Convert.ToInt32(HttpContext.Session.GetInt32("userid"));
+            if(uid == 0){
+                return RedirectToAction("Index", "Auth");
+            }
+            var curCyc = Cyclist.GetCyclistFromID(_context, uid);
+            var @event = await _context.Events.Include(e => e.Ratings).ThenInclude(r => r.Cyclist).Include(e => e.Activity).Include(e => e.Manager)
                 .FirstOrDefaultAsync(m => m.EventID == id);
             if (@event == null)
             {
                 return NotFound();
             }
-            
-            return View(@event);
+            var @vm = new EventViewModel();
+            @vm.Event = @event;
+            @vm.CurUserAlias = curCyc.Alias;
+            if(@event.Activity == null)
+            {
+                @vm.PotenWorkouts = await _context.Workouts.ToListAsync();
+                @vm.PotenRoutes = await _context.Routes.ToListAsync();
+            }
+            return View(@vm);
         }
 
         // GET: Event/Create
@@ -54,7 +65,13 @@ namespace webike.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EventID,Title,Date,StartLocation,Description,Public")] Event @event)
-        {
+        {   
+            var uid = Convert.ToInt32(HttpContext.Session.GetInt32("userid"));
+            if(uid == 0){
+                return RedirectToAction("Index", "Auth");
+            }
+            var curCyc = Cyclist.GetCyclistFromID(_context, uid);
+            @event.Manager = curCyc;
             _context.Add(@event);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -138,6 +155,12 @@ namespace webike.Controllers
             // var 
             return View();
         }
+
+
+
+
+
+
 
         // POST: Event/Delete/5
         [HttpPost, ActionName("Delete")]

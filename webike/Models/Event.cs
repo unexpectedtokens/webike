@@ -25,7 +25,10 @@ namespace webike.Models
         public Cyclist Manager { get; set; }
         public List<Cyclist> Attendees { get; set; }
         public List<Rating> Ratings { get; set; }
-
+        public bool UserIsOwner(string alias)
+        {
+            return alias == Manager.Alias;
+        }
         public bool Public {get;set;}
 
         public EventActivity Activity {get;set;}
