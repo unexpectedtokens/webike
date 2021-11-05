@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +6,7 @@ using webike.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using webike.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 namespace webike.Controllers
 {
     public class EventController : Controller
@@ -36,7 +36,9 @@ namespace webike.Controllers
                 return RedirectToAction("Index", "Auth");
             }
             var curCyc = Cyclist.GetCyclistFromID(_context, uid);
-            var @event = await _context.Events.Include(e => e.Ratings).ThenInclude(r => r.Cyclist).Include(e => e.Activity).Include(e => e.Manager)
+            
+
+            var @event = await _context.Events.Include(e => e.Ratings).ThenInclude(r => r.Cyclist).Include(r => r.Attendees).Include(e => e.Manager)
                 .FirstOrDefaultAsync(m => m.EventID == id);
             if (@event == null)
             {
@@ -207,6 +209,26 @@ namespace webike.Controllers
         private bool EventExists(int id)
         {
             return _context.Events.Any(e => e.EventID == id);
+        }
+
+        public IActionResult Join(int id)
+        {
+            var events = _context.Events.Find(id);
+            ViewBag.Users = new SelectList(_context.Cyclists, "UserID", "Alias");
+            JoinViewModel join = new();
+            join.EventID = events.EventID;
+            return View(join);
+        }
+
+        [HttpPost]
+        public IActionResult JoinEvent(JoinViewModel jvm)
+        {
+            var @event = _context.Events.Where(g => g.EventID == jvm.EventID).Include(g => g.Attendees).Include(e => e.Ratings).FirstOrDefault();
+            var user = _context.Cyclists.Find(jvm.UserID);
+            @event.Attendees.Add(user);
+            _context.SaveChanges();
+
+            return View("Details", @event);
         }
     }
 }

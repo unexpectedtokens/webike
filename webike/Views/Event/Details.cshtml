@@ -40,6 +40,39 @@
     </dl>
 </div>
 
+<div>
+    <a asp-action="Join" asp-route-id="@Model.Event.EventID">Vrienden toevoegen</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Gebruikersnaam
+            </th>
+            <th>
+                Naam
+            </th>
+            <th>
+                Woonplaats
+            </th>
+        </tr>
+        @foreach (var item in Model.Event.Attendees)
+        {
+            <tr>
+                <td>
+                    @item.Alias
+                </td>
+                <td>
+                    @item.FirstName @item.LastName
+                </td>
+                <td>
+                    @item.City
+                </td>
+            </tr>
+        }
+    </thead>
+</table>
 
 <div>
     @if(Model.Event.Activity == null){
@@ -104,10 +137,13 @@
         }
     }
 </div>
+
 @if(userIsOwner){
     <div>
         <a asp-action="Edit" asp-route-id="@Model.Event.EventID">Edit</a>    
     </div>
 }
 <a asp-action="Index">Back to List</a>
+
+
 
