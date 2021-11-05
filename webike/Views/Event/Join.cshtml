@@ -1,0 +1,18 @@
+﻿@model webike.ViewModels.JoinViewModel
+@{
+    ViewData["Title"] = "Join";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Join</h1>
+<hr />
+
+<form asp-action="JoinEvent">
+    <label asp-for="UserID"></label>
+    <select asp-for="UserID" asp-items="ViewBag.Users"></select>
+    <input type="submit" value="Join event" />
+    <input type="hidden" value="@Model.EventID" asp-for="EventID" />
+
+</form>
+
+

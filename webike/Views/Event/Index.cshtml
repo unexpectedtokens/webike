@@ -7,7 +7,7 @@
  <div class="flexbox-containerLanding">
 
         <div class="flexbox-item flexbox-itemLanding1">
-            <h1 class="display-4">Oefeningen</h1>
+            <h1 class="display-4">Events</h1>
 
         </div>
 
@@ -19,25 +19,15 @@
 
 
 <div class="flexbox-container">
-<div class="flexbox-containerEvent">
-    @foreach (var item in Model) {
-        <a href="/Event/Details/@item.EventID" class="flexbox-item flexbox-itemEvent2 card">
-            <button type="button" class="btn btn-link">@item.Title</button>
-        </a>
+    <div class="flexbox-containerEvent">
+        @foreach (var item in Model)
+        {
+            <a href="/Event/Details/@item.EventID" class="flexbox-item flexbox-itemEvent2 card">
+                <button type="button" class="btn btn-link">@item.Title</button>
+            </a>
 
 
-
-
-
-
-
-
-
-
-
-
-
-    }
+        }
         @* <div class="flexbox-item flexbox-itemEvent2">
             <button type="button" class="btn btn-link">Oefeningnaam</button>
         </div>
@@ -55,7 +45,7 @@
                 <option value="All">Alle oefeningen</option>
                 <option value="Friends">Oefeningen van vrienden</option>
             </select>
-        </div> 
+        </div>
 
 
     </div>

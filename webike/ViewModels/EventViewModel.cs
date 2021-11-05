@@ -7,6 +7,7 @@ namespace webike.ViewModels
 
         public Event Event {get;set;}
         public List<Rating> Ratings {get;set;}
+        public List<Contact> Contacts { get; set; }
 
         public int SelectedEventActivityID {get;set;}
 

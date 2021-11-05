@@ -14,7 +14,5 @@ namespace webike.Models
         
         public User Sender {get;set;}
         public bool Accepted {get;set;}
-
-
     }
 }
