@@ -86,8 +86,8 @@ body {
 .flexbox-containerLanding {
   display: flex;
   justify-content: center;
-  align-content: center;
-  align-items: center;
+  align-content: flex-start;
+  align-items: flex-start;
 }
 .flexbox-itemLanding1 {
   width: 400px;

@@ -13,12 +13,6 @@
     <h1>@Model.Event.Title</h1>
     <hr />
     <dl class="row">
-        @* <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Event.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Event.Title)
-        </dd> *@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Event.Description)
         </dt>
@@ -57,24 +51,35 @@
                 <div>
                     <h5>Routes</h5>
                     <div>
-                        @foreach (var item in Model.PotenRoutes)
+                        @if(Model.PotenRoutes.Count == 0)
+                        {
+                            <p>Er zijn nog geen routes.</p>
+                        }else{
+                            @foreach (var item in Model.PotenRoutes)
                         {
                             <div class="card">
                                 <h6>@item.Title</h6>
                                 <a href="/Event/AddAct/@Model.Event.EventID?actid=@item.EventActivityID?typeoa=route">Voeg toe aan dit event</a>
                             </div>
                         }
+                        }
+                        
                     </div>
                 </div>
                 <div>
                     <h5>Trainingen</h5>
-                    <div>
-                        @foreach (var item in Model.PotenWorkouts)
+                    <div>@if(Model.PotenWorkouts.Count == 0)
                         {
-                            <div class="card">
-                                <h6>@item.Title</h6>
-                                <a href="/Event/AddAct/@Model.Event.EventID?actid=@item.EventActivityID&typeoa=workout">Voeg toe aan dit event</a>
-                            </div>
+                            <p>Er zijn nog geen routes.</p>
+                        }else{
+                         
+                            @foreach (var item in Model.PotenWorkouts)
+                            {
+                                <div class="card">
+                                    <h6>@item.Title</h6>
+                                    <a href="/Event/AddAct/@Model.Event.EventID?actid=@item.EventActivityID&typeoa=workout">Voeg toe aan dit event</a>
+                                </div>
+                            }
                         }
                     </div>
                 </div>
@@ -85,12 +90,8 @@
     }else{
         <p>De activiteit die wordt uitgevoerd is een @typeOfActivity:</p>
         <h4>@Model.Event.Activity.Title</h4>
-        <a>Verwijder deze activiteit uit deze activiteit</a>
-    }
-    
-        
-        
-         
+        <a href="/Event/RemoveAct/@Model.Event.EventID">Verwijder deze activiteit uit deze activiteit</a>
+    }  
 </div>
 
 <div>

@@ -158,9 +158,40 @@ namespace webike.Controllers
 
 
 
+        //<a href="/Event/AddAct/@Model.Event.EventID?actid=@item.EventActivityID&typeoa=workout">Voeg toe aan dit event</a>
+        public async Task<IActionResult> AddAct(int? id, int actid, string typeoa)
+        {
+            if(id == null || actid == 0)
+            {
+                return Redirect("/Event");
+            }
+
+            
+            var e = await _context.Events.FirstOrDefaultAsync(e => e.EventID == id);
+            if(typeoa == "workout")
+            {
+                var wo = await _context.Workouts.FirstOrDefaultAsync(w => w.EventActivityID == actid);
+                e.Activity = wo;
+            }else if(typeoa == "route"){
+                var route = await _context.Routes.FirstOrDefaultAsync(w => w.EventActivityID == actid);
+                e.Activity = route;
+            }
+            _context.SaveChanges();
+            return Redirect($"/Event/Details/{id}");
+        }
 
 
-
+        public async Task<IActionResult> RemoveAct(int? id)
+        {
+            if(id == null)
+            {
+                return Redirect("/Event");
+            }
+            var e = await _context.Events.Include(e => e.Activity).FirstOrDefaultAsync(e => e.EventID == id);
+            e.Activity = null;
+            _context.SaveChanges();
+            return Redirect($"/Event/Details/{id}");
+        }
 
         // POST: Event/Delete/5
         [HttpPost, ActionName("Delete")]
