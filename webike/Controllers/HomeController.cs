@@ -49,5 +49,12 @@ namespace webike.Controllers
         {
             return View();
         }
+
+        public IActionResult BecomeCoachRequest()
+        {
+            Console.WriteLine("bliepbloep");
+            return RedirectToAction("Account", "Home");
+        }
+
     }
 }

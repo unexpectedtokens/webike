@@ -29,6 +29,7 @@ namespace webike.Controllers
         {
             if (id == null)
             {
+                Console.WriteLine("Jaja");
                 return NotFound();
             }
 
@@ -148,5 +149,6 @@ namespace webike.Controllers
         {
             return _context.Cyclists.Any(e => e.UserID == id);
         }
+
     }
 }
