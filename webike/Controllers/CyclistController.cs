@@ -148,5 +148,9 @@ namespace webike.Controllers
         {
             return _context.Cyclists.Any(e => e.UserID == id);
         }
+
+        public IActionResult BecomeCoachRequest(){
+            return Redirect("/Home");
+        }
     }
 }

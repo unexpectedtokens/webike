@@ -227,8 +227,8 @@ namespace webike.Controllers
             var user = _context.Cyclists.Find(jvm.UserID);
             @event.Attendees.Add(user);
             _context.SaveChanges();
-
-            return View("Details", @event);
+          
+            return Redirect($"/Event/Details/{@event.EventID}");
         }
     }
 }

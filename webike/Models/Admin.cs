@@ -8,7 +8,7 @@ namespace webike.Models
     {
 
 
-        public void AcceptBecomeCoachRequest(Cyclist c, WebikeContext ctx)
+        public void ReviewCoachRequest(Cyclist c, WebikeContext ctx, bool accepted)
         {
             
         }
