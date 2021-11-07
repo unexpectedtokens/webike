@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using webike.Models;
+using webike.ViewModels;
 
 namespace webike.Controllers
 {
@@ -55,6 +57,13 @@ namespace webike.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("EventID,Title,Date,StartLocation,Description,Public")] Event @event)
         {
+            var uid = Convert.ToInt32(HttpContext.Session.GetInt32("userid"));
+            if (uid == 0)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+            var curCyc = Cyclist.GetCyclistFromID(_context, uid);
+            @event.Manager = curCyc;
             _context.Add(@event);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -153,6 +162,27 @@ namespace webike.Controllers
         private bool EventExists(int id)
         {
             return _context.Events.Any(e => e.EventID == id);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateRating(int? id, EventViewModel eventViewModel)
+        {
+            if (id == null)
+            {
+                return Redirect(nameof(Index));
+            }
+            var curUserID = HttpContext.Session.GetInt32("userid");
+            if (curUserID == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+            var curUser = await _context.Cyclists.FirstOrDefaultAsync(c => c.UserID == curUserID);
+            var @event = await _context.Events.Include(r => r.Ratings). Include (r => r.Manager).FirstOrDefaultAsync(r => r.EventID == id);
+            Console.WriteLine(@event.EventID);
+            eventViewModel.NewRating.Cyclist = curUser;
+            @event.Ratings.Add(eventViewModel.NewRating);
+            _context.SaveChanges();
+            return Redirect($"/Event/Details/{id}");
         }
     }
 }

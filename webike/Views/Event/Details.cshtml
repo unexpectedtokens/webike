@@ -1,4 +1,4 @@
-@model webike.Models.Event
+@model webike.ViewModels.EventViewModel;
 
 @{
     ViewData["Title"] = "Details";
@@ -6,39 +6,41 @@
 }
 
 
+<h1>Details</h1>
+
 <div>
-    <h1>@Model.Title</h1>
+    <h4>Event</h4>
     <hr />
     <dl class="row">
         @* <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Title)
+            </dd> *@
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Event.Description)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd> *@
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Event.Description)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Date)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Event.Date)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Date)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Event.Date)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartLocation)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Event.StartLocation)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartLocation)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Event.StartLocation)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Public)
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Event.Public)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Public)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Event.Public)
         </dd>
     </dl>
 </div>
@@ -54,10 +56,43 @@
         }
     }
 </div>
-@if(userIsOwner){
+@if (userIsOwner)
+{
     <div>
-        <a asp-action="Edit" asp-route-id="@Model.EventID">Edit</a>    
+        <a asp-action="Edit" asp-route-id="@Model.Event.EventID">Edit</a>
     </div>
 }
 <a asp-action="Index">Back to List</a>
+
+
+<div class="container">
+    <hr />
+    @if (!userIsOwner)
+    {
+        <form method="post" action="/Event/CreateRating/@Model.Event.EventID">
+            <div>
+                <label>Nummer van 1 tot 5:</label>
+                @Html.TextBoxFor(m => m.NewRating.Number, new { @type = "number", @min = "1", @max = "5" })
+            </div>
+            <div>
+                <label>Tekst</label>
+                @Html.TextAreaFor(m => m.NewRating.Description)
+            </div>
+            <input type="submit" value="Deel ervaring" />
+        </form>
+        //@Html.TextBoxFor(i => i.Port)
+    }
+    <div>
+        @foreach (var item in Model.Event.Ratings)
+        {
+            <div>
+
+                <hr />
+                <p>@item.Cyclist.Alias</p>
+                <p>Rating van: @item.Number</p>
+                <p>@item.Description</p>
+            </div>
+        }
+    </div>
+</div>
 
