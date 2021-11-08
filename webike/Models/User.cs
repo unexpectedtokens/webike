@@ -21,10 +21,5 @@ namespace webike.Models
         //public string Events {get;set;}
         
         //public List<Contact> Contacts {get;set;}
-        public void BecomeCoachRequest(WebikeContext ctx)
-        {
-            this.WantsToBeCoach = true;
-            ctx.SaveChanges();
-        }
     }
 }

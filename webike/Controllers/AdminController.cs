@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +21,7 @@ namespace webike.Controllers
         // GET: Admin
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Admins.ToListAsync());
+            return View(await _context.Cyclists.ToListAsync());
         }
 
         // GET: Admin/Details/5
@@ -32,14 +32,14 @@ namespace webike.Controllers
                 return NotFound();
             }
 
-            var admin = await _context.Admins
+            var cyclist = await _context.Cyclists
                 .FirstOrDefaultAsync(m => m.UserID == id);
-            if (admin == null)
+            if (cyclist == null)
             {
                 return NotFound();
             }
 
-            return View(admin);
+            return View(cyclist);
         }
 
         // GET: Admin/Create
@@ -53,15 +53,15 @@ namespace webike.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,Alias,Password,FirstName,LastName,DateOfBirth,City,IsCoach,WantsToBeCoach,Events")] Admin admin)
+        public async Task<IActionResult> Create([Bind("UserID,Alias,Password,FirstName,LastName,DateOfBirth,City,IsCoach,WantsToBeCoach")] Cyclist cyclist)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(admin);
+                _context.Add(cyclist);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(admin);
+            return View(cyclist);
         }
 
         // GET: Admin/Edit/5
@@ -72,12 +72,12 @@ namespace webike.Controllers
                 return NotFound();
             }
 
-            var admin = await _context.Admins.FindAsync(id);
-            if (admin == null)
+            var cyclist = await _context.Cyclists.FindAsync(id);
+            if (cyclist == null)
             {
                 return NotFound();
             }
-            return View(admin);
+            return View(cyclist);
         }
 
         // POST: Admin/Edit/5
@@ -85,9 +85,9 @@ namespace webike.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID,Alias,Password,FirstName,LastName,DateOfBirth,City,IsCoach,WantsToBeCoach,Events")] Admin admin)
+        public async Task<IActionResult> Edit(int id, [Bind("UserID,Alias,Password,FirstName,LastName,DateOfBirth,City,IsCoach,WantsToBeCoach")] Cyclist cyclist)
         {
-            if (id != admin.UserID)
+            if (id != cyclist.UserID)
             {
                 return NotFound();
             }
@@ -96,12 +96,12 @@ namespace webike.Controllers
             {
                 try
                 {
-                    _context.Update(admin);
+                    _context.Update(cyclist);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AdminExists(admin.UserID))
+                    if (!CyclistExists(cyclist.UserID))
                     {
                         return NotFound();
                     }
@@ -112,7 +112,7 @@ namespace webike.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(admin);
+            return View(cyclist);
         }
 
         // GET: Admin/Delete/5
@@ -123,14 +123,14 @@ namespace webike.Controllers
                 return NotFound();
             }
 
-            var admin = await _context.Admins
+            var cyclist = await _context.Cyclists
                 .FirstOrDefaultAsync(m => m.UserID == id);
-            if (admin == null)
+            if (cyclist == null)
             {
                 return NotFound();
             }
 
-            return View(admin);
+            return View(cyclist);
         }
 
         // POST: Admin/Delete/5
@@ -138,15 +138,33 @@ namespace webike.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var admin = await _context.Admins.FindAsync(id);
-            _context.Admins.Remove(admin);
+            var cyclist = await _context.Cyclists.FindAsync(id);
+            _context.Cyclists.Remove(cyclist);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AdminExists(int id)
+        private bool CyclistExists(int id)
         {
-            return _context.Admins.Any(e => e.UserID == id);
+            return _context.Cyclists.Any(e => e.UserID == id);
+        }
+        public IActionResult AcceptBecomeCoachRequest(int id)
+        {
+            var user = _context.Cyclists.FirstOrDefault(c => c.UserID == id);
+
+            user.IsCoach = true;
+            user.WantsToBeCoach = false;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Admin");
+        }
+
+        public IActionResult DenyBecomeCoachRequest(int id)
+        {
+            var user = _context.Cyclists.FirstOrDefault(c => c.UserID == id);
+
+            user.WantsToBeCoach = false;
+            _context.SaveChanges();
+            return RedirectToAction("Index", "Admin");
         }
     }
 }
